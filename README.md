@@ -2,6 +2,10 @@
 
 An LLM-based agent that helps DCU students find their stuff — built for CSC1202.
 
+![Django](https://img.shields.io/badge/Django-green?logo=django&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-blue?logo=mysql&logoColor=white)
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
+
 ## What it does
 
 - **Found something?** Describe it + upload a photo — the agent extracts object, colour, brand, location and features automatically.
