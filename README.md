@@ -11,7 +11,13 @@ An LLM-based agent that helps DCU students find their stuff — built for CSC120
 - **Found something?** Describe it + upload a photo — the agent extracts object, colour, brand, location and features automatically.
 - **Lost something?** Describe it in your own words — the agent semantically matches it against everything logged as found.
 
-
+```mermaid
+flowchart LR
+    A[Found item] -->|description + photo| B{{LLM Agent}}
+    B -->|extracts attributes| C[(Database)]
+    D[Lost item] -->|description| B
+    C -->|ranked matches| D
+```
 
 ## Stack
 
