@@ -1,0 +1,6 @@
+# Fill in as the project takes shape. Likely candidates:
+# Django
+# mysqlclient          (or PyMySQL, depending on how you connect to MySQL)
+# openai               (or anthropic / other, depending on which LLM API you use)
+# python-dotenv
+# pillow               (for handling uploaded photos)
