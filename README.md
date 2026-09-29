@@ -34,7 +34,10 @@ Django · MySQL · LLM API (TBD) · Bootstrap or React (TBD)
 | Nelson Cololo Onodugo | |
 | Uvidu Vihan DeSilva | |
 
+## Docs
 
+- [`docs/deliverables/`](docs/deliverables/) — the three assessed reports
+- [`docs/meeting-notes/`](docs/meeting-notes/) — meeting reports
 
 ---
 CSC1202 · Prompt Engineering and LLM-Based Agents · DCU 2026
