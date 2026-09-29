@@ -28,6 +28,11 @@ Django · MySQL · LLM API (TBD) · Bootstrap or React (TBD)
 | Name | Role |
 |---|---|
 | Alexander Zudins | |
+| Tawana Gumede | |
+| Cameron Servitillo | |
+| Muhammad Muhammad Arfhan | |
+| Nelson Cololo Onodugo | |
+| Uvidu Vihan DeSilva | |
 
 ## Docs
 
