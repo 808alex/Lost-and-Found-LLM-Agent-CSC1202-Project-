@@ -1,0 +1,26 @@
+# Meeting 3 — 12/10
+
+## Attendance
+
+- [✓] Alexander Zudins
+- [✓] Cameron Servitillo
+- [✓] Tawana Gumede
+- [✓] Muhammad Muhammad Arfhan
+- [✓] Nelson Cololo Onodugo
+- [✓] Uvidu Vihan DeSilva
+
+## Progress
+
+Alexander Zudins, Uvidu Vihan DeSilva and Nelson Cololo Onodugo completed the technical research and presented their findings to the rest of the group. The updated project specification was reviewed, covering the proposed system, user workflows, AI agent functionality, technical approach, privacy considerations and initial risks.
+
+## Discussed & agreed
+
+Reviewed the technical research, including how the LLM agent would extract structured information from free-text item descriptions and rank potential matches between lost and found items. The proposed use of a MySQL database and an AI API was discussed, alongside the need for structured outputs to ensure the model returns data in a format the application can process.
+
+Also considered privacy and security requirements, agreeing on the importance of using synthetic data for testing and demonstrations. Human verification will be required before an item is returned to prevent false claims, with additional staff involvement for guest users who are not DCU members.
+
+After the presentation, agreed to continue with the existing division of responsibilities: Computer Science members focus on technical research and planning, Computing with Business members focus on business research and the user-related aspects of the project.
+
+## Next steps
+
+Computing with Business members will carry out the business research, focusing on the problem, target users and relevant business requirements. Computer Science members will continue developing the technical plan, considering the AI API, database implementation, agent functionality and security requirements. Both groups will combine their findings to guide the next stage of requirements gathering and project development.
