@@ -19,6 +19,22 @@ flowchart LR
     C -->|ranked matches| D
 ```
 
+## Running it locally
+
+```
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py load_demo          # made-up found items + demo login
+python manage.py createsuperuser    # your own admin account
+python manage.py runserver
+```
+
+Then open http://127.0.0.1:8000/ and log in as `student` / `dcu-demo-2026`
+(or your admin account). Staff add found items at http://127.0.0.1:8000/admin/.
+
+The LLM agent's two jobs (filling in item details, and matching searches to
+found items) live in `items/agent.py` — placeholders for now.
+
 ## Stack
 
 Django · MySQL · LLM API (TBD) · Bootstrap or React (TBD)
