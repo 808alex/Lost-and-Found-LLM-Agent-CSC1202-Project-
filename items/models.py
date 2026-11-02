@@ -3,6 +3,37 @@ from django.db import models
 
 
 class Item(models.Model):
+    # Fixed lists so search filters work, and so the LLM agent has to pick
+    # one of these instead of inventing its own wording.
+    class Category(models.TextChoices):
+        PHONE = "phone", "Phone"
+        WALLET = "wallet", "Wallet / purse"
+        KEYS = "keys", "Keys"
+        BAG = "bag", "Bag / backpack"
+        LAPTOP = "laptop", "Laptop / tablet"
+        HEADPHONES = "headphones", "Headphones / earbuds"
+        CLOTHING = "clothing", "Clothing"
+        BOTTLE = "bottle", "Water bottle"
+        CARD = "card", "ID / student card"
+        JEWELLERY = "jewellery", "Jewellery / watch"
+        OTHER = "other", "Other"
+
+    class Colour(models.TextChoices):
+        BLACK = "black", "Black"
+        WHITE = "white", "White"
+        GREY = "grey", "Grey"
+        SILVER = "silver", "Silver"
+        GOLD = "gold", "Gold"
+        RED = "red", "Red"
+        ORANGE = "orange", "Orange"
+        YELLOW = "yellow", "Yellow"
+        GREEN = "green", "Green"
+        BLUE = "blue", "Blue"
+        PURPLE = "purple", "Purple"
+        PINK = "pink", "Pink"
+        BROWN = "brown", "Brown"
+        MULTI = "multi", "Multicoloured"
+
     class Kind(models.TextChoices):
         LOST = "lost", "Lost"
         FOUND = "found", "Found"
@@ -24,8 +55,8 @@ class Item(models.Model):
     date = models.DateField(help_text="When it was lost/found")
 
     # Filled in by the LLM agent from the description/photo
-    object_type = models.CharField(max_length=100, blank=True)
-    colour = models.CharField(max_length=50, blank=True)
+    object_type = models.CharField(max_length=100, choices=Category.choices, blank=True)
+    colour = models.CharField(max_length=50, choices=Colour.choices, blank=True)
     brand = models.CharField(max_length=100, blank=True)
     location = models.CharField(max_length=200, blank=True)
     features = models.TextField(blank=True)
@@ -36,4 +67,4 @@ class Item(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.get_kind_display()}: {self.object_type or self.description[:40]}"
+        return f"{self.get_kind_display()}: {self.get_object_type_display() or self.description[:40]}"

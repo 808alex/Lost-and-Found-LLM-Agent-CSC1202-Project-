@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Report {{ kind }} item{% endblock %}
+{% block title %}Report a lost item · DCU Lost & Found{% endblock %}
 
 {% block content %}
-<h1>Report a {{ kind }} item</h1>
-<form method="post" enctype="multipart/form-data" class="col-md-8">
+<h1>Report a lost item</h1>
+<form method="post" enctype="multipart/form-data" class="form">
   {% csrf_token %}
   {{ form.as_div }}
-  <button class="btn btn-primary mt-3">Submit</button>
+  <button class="btn btn-block">Submit</button>
 </form>
 {% endblock %}

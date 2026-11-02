@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Find my item · DCU Lost & Found{% endblock %}
+
+{% block content %}
+<style>
+  .find { max-width: 640px; margin: 8vh auto 0; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; }
+  .filters > div { flex: 1 1 140px; }
+  .filters label { font-size: 0.85rem; margin: 0 0 4px; color: var(--muted); }
+  .filters input, .filters select { padding: 8px 10px; }
+</style>
+
+<div class="find">
+  <h1>Find my item</h1>
+  <p class="muted">Describe what you lost in your own words. Our agent will search everything that's been handed in.</p>
+
+  <form method="get" action="{% url 'items:results' %}" class="form" style="max-width:none">
+    {{ form.q.label_tag }}
+    {{ form.q }}
+
+    <p class="muted" style="margin:24px 0 8px">Optional filters</p>
+    <div class="filters">
+      <div>{{ form.object_type.label_tag }}{{ form.object_type }}</div>
+      <div>{{ form.colour.label_tag }}{{ form.colour }}</div>
+      <div>{{ form.location.label_tag }}{{ form.location }}</div>
+      <div>{{ form.lost_on.label_tag }}{{ form.lost_on }}</div>
+    </div>
+
+    <button class="btn btn-block">Search</button>
+  </form>
+</div>
+{% endblock %}

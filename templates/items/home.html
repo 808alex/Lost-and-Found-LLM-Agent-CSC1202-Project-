@@ -1,35 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="mb-4">
-  <h1>Lost something? Found something?</h1>
-  <a class="btn btn-primary" href="{% url 'items:report' 'lost' %}">I lost something</a>
-  <a class="btn btn-outline-primary" href="{% url 'items:report' 'found' %}">I found something</a>
+<h1>Hi {{ user.first_name|default:user.username }} 👋</h1>
+<p class="muted">Lost something on campus? Search everything that's been handed in.</p>
+<p>
+  <a class="btn" href="{% url 'items:find' %}">Find my item</a>
+  <a class="btn btn-outline" href="{% url 'items:report' %}">Report a lost item</a>
+</p>
+
+<h2>Recently found</h2>
+<div class="card">
+  <ul>
+    {% for item in found_items %}
+      <li>
+        <a href="{% url 'items:detail' item.pk %}">{{ item }}</a>
+        <span class="muted"> · {{ item.location|default:"unknown location" }} · {{ item.date }}</span>
+      </li>
+    {% empty %}
+      <li class="muted">Nothing has been handed in yet.</li>
+    {% endfor %}
+  </ul>
 </div>
-
-{% if user.is_authenticated %}
-<h2 class="h4">My reports</h2>
-<ul class="list-group mb-4">
-  {% for item in my_items %}
-    <li class="list-group-item">
-      <a href="{% url 'items:detail' item.pk %}">{{ item }}</a>
-      <span class="badge bg-secondary">{{ item.get_status_display }}</span>
-    </li>
-  {% empty %}
-    <li class="list-group-item text-muted">You haven't reported anything yet.</li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-<h2 class="h4">Recently found</h2>
-<ul class="list-group">
-  {% for item in found_items %}
-    <li class="list-group-item">
-      <a href="{% url 'items:detail' item.pk %}">{{ item }}</a>
-      <small class="text-muted">— {{ item.location|default:"unknown location" }}, {{ item.date }}</small>
-    </li>
-  {% empty %}
-    <li class="list-group-item text-muted">Nothing has been handed in yet.</li>
-  {% endfor %}
-</ul>
 {% endblock %}
