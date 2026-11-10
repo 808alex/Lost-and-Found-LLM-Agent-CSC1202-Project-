@@ -4,28 +4,38 @@
 
 {% block content %}
 <style>
-  .find { max-width: 640px; margin: 8vh auto 0; }
-  .filters { display: flex; flex-wrap: wrap; gap: 10px; }
-  .filters > div { flex: 1 1 140px; }
-  .filters label { font-size: 0.85rem; margin: 0 0 4px; color: var(--muted); }
-  .filters input, .filters select { padding: 8px 10px; }
+  .find { max-width: 680px; margin: 4vh auto 0; }
+  .search-box { position: relative; }
+  .search-box input { padding: 16px 18px 16px 48px; font-size: 1.05rem; }
+  .search-box::before { content: "🔍"; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
+  .filters-toggle { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .filters-toggle summary { cursor: pointer; color: var(--muted); font-weight: 500; list-style: none; user-select: none; }
+  .filters-toggle summary::-webkit-details-marker { display: none; }
+  .filters-toggle summary::before { content: "▸"; display: inline-block; margin-right: 8px; transition: transform .15s; }
+  .filters-toggle[open] summary::before { transform: rotate(90deg); }
+  .filters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 14px; margin-top: 8px; }
+  .filters label { font-size: 0.85rem; margin: 12px 0 6px; color: var(--muted); }
+  .filters input, .filters select { padding: 10px 12px; }
+  @media (max-width: 560px) { .filters { grid-template-columns: 1fr; } }
 </style>
 
 <div class="find">
   <h1>Find my item</h1>
-  <p class="muted">Describe what you lost in your own words. Our agent will search everything that's been handed in.</p>
+  <p class="lead">Describe what you lost in your own words. Our agent will search everything that's been handed in.</p>
 
-  <form method="get" action="{% url 'items:results' %}" class="form" style="max-width:none">
+  <form method="get" action="{% url 'items:results' %}" class="form panel">
     {{ form.q.label_tag }}
-    {{ form.q }}
+    <div class="search-box">{{ form.q }}</div>
 
-    <p class="muted" style="margin:24px 0 8px">Optional filters</p>
-    <div class="filters">
-      <div>{{ form.object_type.label_tag }}{{ form.object_type }}</div>
-      <div>{{ form.colour.label_tag }}{{ form.colour }}</div>
-      <div>{{ form.location.label_tag }}{{ form.location }}</div>
-      <div>{{ form.lost_on.label_tag }}{{ form.lost_on }}</div>
-    </div>
+    <details class="filters-toggle">
+      <summary>Optional filters</summary>
+      <div class="filters">
+        <div>{{ form.object_type.label_tag }}{{ form.object_type }}</div>
+        <div>{{ form.colour.label_tag }}{{ form.colour }}</div>
+        <div>{{ form.location.label_tag }}{{ form.location }}</div>
+        <div>{{ form.lost_on.label_tag }}{{ form.lost_on }}</div>
+      </div>
+    </details>
 
     <button class="btn btn-block">Search</button>
   </form>

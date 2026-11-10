@@ -1,24 +1,67 @@
 {% extends "base.html" %}
+{% load item_extras %}
 
 {% block content %}
-<h1>Hi {{ user.first_name|default:user.username }} 👋</h1>
-<p class="muted">Lost something on campus? Search everything that's been handed in.</p>
-<p>
-  <a class="btn" href="{% url 'items:find' %}">Find my item</a>
-  <a class="btn btn-outline" href="{% url 'items:report' %}">Report a lost item</a>
-</p>
+<style>
+  .hero {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: center;
+    padding: 36px; border-radius: 16px; border: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.16), rgba(255, 255, 255, 0.03) 55%);
+  }
+  .hero .eyebrow { color: #ffa366; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 8px; }
+  .hero-art { font-size: 5rem; text-align: center; line-height: 1; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3)); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .step .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--orange-soft); color: #ffa366; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; }
+  .step strong { display: block; margin-bottom: 2px; }
+  .step p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding: 24px; }
+    .hero-art { display: none; }
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>
 
-<h2>Recently found</h2>
-<div class="card">
-  <ul>
-    {% for item in found_items %}
-      <li>
-        <a href="{% url 'items:detail' item.pk %}">{{ item }}</a>
-        <span class="muted"> · {{ item.location|default:"unknown location" }} · {{ item.date }}</span>
-      </li>
-    {% empty %}
-      <li class="muted">Nothing has been handed in yet.</li>
-    {% endfor %}
-  </ul>
+<section class="hero">
+  <div>
+    <p class="eyebrow">Welcome back</p>
+    <h1>Hi {{ user.first_name|default:user.username }} 👋</h1>
+    <p class="lead">Lost something on campus? Describe it in your own words and our agent will search everything that's been handed in.</p>
+    <div class="btn-row">
+      <a class="btn" href="{% url 'items:find' %}">🔍 Find my item</a>
+      <a class="btn btn-outline" href="{% url 'items:report' %}">Report a lost item</a>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">🎒🔑<br>📱🎧</div>
+</section>
+
+<div class="steps">
+  <div class="step"><span class="num">1</span><strong>Describe it</strong><p>“Black Nike backpack with a keyring” is plenty.</p></div>
+  <div class="step"><span class="num">2</span><strong>We match it</strong><p>The agent compares your description with found items.</p></div>
+  <div class="step"><span class="num">3</span><strong>Collect it</strong><p>Pick it up from the campus Lost &amp; Found desk.</p></div>
 </div>
+
+<div class="section-head">
+  <h2>Recently found</h2>
+  {% if found_items %}<span class="muted">{{ found_items|length }} item{{ found_items|length|pluralize }}</span>{% endif %}
+</div>
+
+{% if found_items %}
+  <div class="grid">
+    {% for item in found_items %}
+      <a class="tile" href="{% url 'items:detail' item.pk %}">
+        <div class="photo">
+          {% if item.photo %}<img src="{{ item.photo.url }}" alt="Photo of {{ item }}">{% else %}<span aria-hidden="true">{{ item.object_type|category_icon }}</span>{% endif %}
+        </div>
+        <div class="info">
+          <strong>{{ item.get_object_type_display|default:item.description|truncatechars:30 }}</strong>
+          <small>{{ item.location|default:"Unknown location" }}</small>
+          <small>Found {{ item.date|date:"j M Y" }}</small>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty"><span class="icon">📭</span>Nothing has been handed in yet.</div>
+{% endif %}
 {% endblock %}

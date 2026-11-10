@@ -1,19 +1,59 @@
 {% extends "base.html" %}
+{% load item_extras %}
+
+{% block title %}{{ item }} · DCU Lost & Found{% endblock %}
 
 {% block content %}
-<h1>{{ item }} <span class="badge">{{ item.get_status_display }}</span></h1>
-{% if item.photo %}
-  <img src="{{ item.photo.url }}" alt="Photo of item" style="max-height: 300px; border-radius: 8px; margin-bottom: 16px">
-{% endif %}
-<div class="card">
-  <ul>
-    <li><span class="muted">Description</span><br>{{ item.description|linebreaksbr }}</li>
-    <li><span class="muted">Location</span><br>{{ item.location|default:"—" }}</li>
-    <li><span class="muted">Date</span><br>{{ item.date }}</li>
-    <li><span class="muted">Category</span><br>{{ item.get_object_type_display|default:"—" }}</li>
-    <li><span class="muted">Colour</span><br>{{ item.get_colour_display|default:"—" }}</li>
-    <li><span class="muted">Brand</span><br>{{ item.brand|default:"—" }}</li>
-  </ul>
+<style>
+  .detail { display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 28px; align-items: start; }
+  .detail .photo {
+    aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);
+    display: grid; place-items: center; font-size: 5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
+  }
+  .detail .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-head { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+  .facts > div { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .facts > div:nth-child(odd) { border-right: 1px solid var(--border); }
+  .facts dt { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .facts dd { margin: 0; font-weight: 500; }
+  .description { padding: 18px 20px; }
+  .description dt { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .description dd { margin: 0; }
+  @media (max-width: 720px) {
+    .detail { grid-template-columns: 1fr; }
+    .detail .photo { max-width: 320px; }
+  }
+</style>
+
+<a class="back-link" href="{% url 'items:home' %}">← Back</a>
+
+<div class="detail">
+  <div class="photo">
+    {% if item.photo %}<img src="{{ item.photo.url }}" alt="Photo of {{ item }}">{% else %}<span aria-hidden="true">{{ item.object_type|category_icon }}</span>{% endif %}
+  </div>
+
+  <div>
+    <div class="detail-head">
+      <span class="badge {% if item.kind == 'lost' %}badge-lost{% else %}badge-found{% endif %}">{{ item.get_kind_display }}</span>
+      <span class="badge">{{ item.get_status_display }}</span>
+    </div>
+    <h1>{{ item.get_object_type_display|default:item.description|truncatechars:50 }}</h1>
+    <p class="muted" style="margin:0 0 20px">{{ item.location|default:"Unknown location" }} · {{ item.date|date:"j F Y" }}</p>
+
+    <dl class="card" style="margin:0">
+      <div class="facts">
+        <div><dt>Category</dt><dd>{{ item.get_object_type_display|default:"—" }}</dd></div>
+        <div><dt>Colour</dt><dd>{{ item.get_colour_display|default:"—" }}</dd></div>
+        <div><dt>Brand</dt><dd>{{ item.brand|default:"—" }}</dd></div>
+        <div><dt>Location</dt><dd>{{ item.location|default:"—" }}</dd></div>
+      </div>
+      <div class="description">
+        <dt>Description</dt>
+        <dd>{{ item.description|linebreaksbr }}</dd>
+      </div>
+    </dl>
+  </div>
 </div>
-<p><a href="{% url 'items:home' %}">← Back</a></p>
 {% endblock %}

@@ -3,10 +3,15 @@
 {% block title %}Report a lost item · DCU Lost & Found{% endblock %}
 
 {% block content %}
-<h1>Report a lost item</h1>
-<form method="post" enctype="multipart/form-data" class="form">
-  {% csrf_token %}
-  {{ form.as_div }}
-  <button class="btn btn-block">Submit</button>
-</form>
+<div style="max-width: 600px; margin: 0 auto">
+  <a class="back-link" href="{% url 'items:home' %}">← Back to home</a>
+  <h1>Report a lost item</h1>
+  <p class="lead">Tell us what you lost. We'll pick out the category and colour automatically and keep an eye out for it.</p>
+
+  <form method="post" enctype="multipart/form-data" class="form panel">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <button class="btn btn-block">Submit report</button>
+  </form>
+</div>
 {% endblock %}

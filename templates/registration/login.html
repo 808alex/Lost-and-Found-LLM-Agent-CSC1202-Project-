@@ -4,20 +4,32 @@
 
 {% block content %}
 <style>
-  .login { max-width: 520px; margin: 12vh auto 0; }
+  .login { max-width: 440px; margin: 8vh auto 0; }
+  .login-brand { text-align: center; margin-bottom: 28px; }
+  .login-brand .brand-mark { width: 56px; height: 56px; border-radius: 14px; font-size: 1.05rem; margin: 0 auto 16px; }
+  .login-brand h1 { font-size: 1.7rem; }
+  .login-brand p { color: var(--muted); margin: 0; }
   .password-wrap { position: relative; }
-  .password-wrap input { padding-right: 48px; }
+  .password-wrap input { padding-right: 52px; }
   .toggle-password {
-    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer; color: #fff; opacity: 0.8; font-size: 1.1rem;
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: #5a6478; font-size: 1.1rem;
+    padding: 6px 8px; border-radius: 6px;
   }
+  .toggle-password:hover { background: #eef1f6; }
 </style>
 
 <div class="login">
-  <form method="post" class="form" style="max-width:none">
+  <div class="login-brand">
+    <div class="brand-mark">DCU</div>
+    <h1>Lost &amp; Found</h1>
+    <p>Log in with your DCU account to continue.</p>
+  </div>
+
+  <form method="post" class="form panel">
     {% csrf_token %}
     {% if form.errors %}
-      <ul class="errorlist"><li>Your username and password didn't match. Please try again.</li></ul>
+      <ul class="errorlist nonfield"><li>Your username and password didn't match. Please try again.</li></ul>
     {% endif %}
 
     <label for="id_username">Username</label>
@@ -27,11 +39,11 @@
     <div class="password-wrap">
       <input type="password" name="password" id="id_password" autocomplete="current-password" required>
       <button type="button" class="toggle-password" aria-label="Show password"
-              onclick="const p = document.getElementById('id_password'); p.type = p.type === 'password' ? 'text' : 'password';">&#128065;</button>
+              onclick="const p = document.getElementById('id_password'); const show = p.type === 'password'; p.type = show ? 'text' : 'password'; this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');">&#128065;</button>
     </div>
 
     <input type="hidden" name="next" value="{{ next }}">
-    <button class="btn btn-block">Login</button>
+    <button class="btn btn-block">Log in</button>
   </form>
 </div>
 {% endblock %}

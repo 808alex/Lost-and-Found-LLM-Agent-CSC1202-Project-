@@ -1,56 +1,64 @@
 {% extends "base.html" %}
+{% load item_extras %}
 
 {% block title %}Results · DCU Lost & Found{% endblock %}
 
 {% block content %}
 <style>
-  .agent { background: rgba(255, 255, 255, 0.06); border-left: 4px solid var(--orange); border-radius: 6px; padding: 14px 18px; }
-  .agent .chip { display: inline-block; background: var(--orange); border-radius: 14px; padding: 3px 12px; margin: 6px 6px 0 0; font-size: 0.9rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 16px; }
-  .tile { background: rgba(255, 255, 255, 0.06); border-radius: 8px; overflow: hidden; color: var(--text); text-decoration: none; }
-  .tile:hover { outline: 2px solid var(--orange); }
-  .tile .photo { aspect-ratio: 1; background: rgba(0, 0, 0, 0.25); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
-  .tile .photo img { width: 100%; height: 100%; object-fit: cover; }
-  .tile .info { padding: 10px 12px; }
-  .tile .info strong { display: block; }
-  .tile .info small { color: var(--muted); }
+  .agent {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--orange);
+    border-radius: var(--radius); padding: 18px 20px;
+  }
+  .agent .avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--orange-soft); font-size: 1.2rem; }
+  .agent .name { font-weight: 600; }
+  .agent .quote { margin: 4px 0 0; color: var(--muted); }
+  .agent .quote q { color: var(--text); }
 </style>
 
-<p><a href="{% url 'items:find' %}">← New search</a></p>
+<a class="back-link" href="{% url 'items:find' %}">← New search</a>
 
 {% if query %}
 <div class="agent">
-  <strong>🤖 Lost &amp; Found agent</strong>
-  <p style="margin:6px 0 0">You said: “{{ query }}”</p>
-  {% if understood.category or understood.colour %}
-    <div>
-      I'm looking for:
-      {% if understood.category %}<span class="chip">{{ understood.category }}</span>{% endif %}
-      {% if understood.colour %}<span class="chip">{{ understood.colour }}</span>{% endif %}
-    </div>
-  {% endif %}
+  <div class="avatar" aria-hidden="true">🤖</div>
+  <div>
+    <div class="name">Lost &amp; Found agent</div>
+    <p class="quote">You said: <q>{{ query }}</q></p>
+    {% if understood.category or understood.colour %}
+      <div style="margin-top:6px">
+        <span class="muted">I'm looking for:</span><br>
+        {% if understood.category %}<span class="chip">{{ understood.category }}</span>{% endif %}
+        {% if understood.colour %}<span class="chip">{{ understood.colour }}</span>{% endif %}
+      </div>
+    {% endif %}
+  </div>
 </div>
 {% endif %}
 
-<h2>{{ results|length }} possible match{{ results|length|pluralize:"es" }}</h2>
+<div class="section-head">
+  <h2>{{ results|length }} possible match{{ results|length|pluralize:"es" }}</h2>
+</div>
+
 {% if results %}
   <div class="grid">
     {% for item in results %}
       <a class="tile" href="{% url 'items:detail' item.pk %}">
         <div class="photo">
-          {% if item.photo %}<img src="{{ item.photo.url }}" alt="Photo of {{ item }}">{% else %}📦{% endif %}
+          {% if item.photo %}<img src="{{ item.photo.url }}" alt="Photo of {{ item }}">{% else %}<span aria-hidden="true">{{ item.object_type|category_icon }}</span>{% endif %}
         </div>
         <div class="info">
           <strong>{{ item.get_object_type_display|default:item.description|truncatechars:30 }}</strong>
-          <small>{{ item.get_colour_display|default:"" }}{% if item.colour and item.location %} · {% endif %}{{ item.location }}</small><br>
-          <small>Found {{ item.date }}</small>
+          <small>{{ item.get_colour_display|default:"" }}{% if item.colour and item.location %} · {% endif %}{{ item.location }}</small>
+          <small>Found {{ item.date|date:"j M Y" }}</small>
         </div>
       </a>
     {% endfor %}
   </div>
+{% else %}
+  <div class="empty"><span class="icon">🔎</span>No matches yet. Try describing it differently or removing a filter.</div>
 {% endif %}
 
-<p class="muted" style="margin-top:24px">
+<p class="muted" style="margin-top:28px">
   Can't see it? <a href="{% url 'items:report' %}">Report it as lost</a> and we'll keep an eye out.
 </p>
 {% endblock %}
